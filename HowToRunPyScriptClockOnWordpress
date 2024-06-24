@@ -1,0 +1,25 @@
+<!-- ブロックエディタでHTMLブロックを追加して以下二行を貼り付け -->
+<script defer src="https://pyscript.net/latest/pyscript.js"></script>
+<link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css">
+
+<!-- 時計を挿入したい位置にHTMLブロックを追加して以下を貼り付け -->
+<div id="clock" style="font-size: 48px; text-align: center; margin-top: 20px;"></div>
+
+<py-script>
+from js import document, window, Date
+from pyodide.ffi import create_proxy
+
+def update_clock():
+    now = Date.new()
+    hours = now.getHours()
+    minutes = now.getMinutes()
+    seconds = now.getSeconds()
+    time_str = f"{hours:02}:{minutes:02}:{seconds:02}"
+    document.getElementById("clock").innerHTML = time_str
+
+    # 再度実行
+    window.setTimeout(update_clock_proxy, 1000)
+
+update_clock_proxy = create_proxy(update_clock)
+update_clock_proxy()
+</py-script>
